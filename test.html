@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <meta charset="utf-8" />
+    <body>
+        <button id="button">ある要素を見つけたら音出る</button>
+        <script>
+            // 👇 soundを定義
+            let sound = null;
+            (document.getElementById('button')).addEventListener('click', function(e) {
+                e.preventDefault();
+                // 👇 ファイルを読み込んでミュートで再生しちゃう
+                sound = new Audio("./jump01.mp3");
+                sound.load();
+                sound.muted = true;
+                sound.play();
+
+                const body = document.querySelector('body');
+                const div = document.createElement('div');
+                div.innerText = 'hello';
+                div.id = 'hello';
+                body.appendChild(div);
+            });
+            let is_played = false;
+            let interval_id = setInterval(() => {
+                if (!is_played) {
+                    let hello = document.getElementById('hello');
+                    if (hello && sound !== null) {
+                        // 👇 再生時間を最初に戻す
+                        sound.currentTime = 0;
+                        // 👇 ミュートを解除して再生
+                        sound.muted = false;
+                        sound.play();
+
+                        is_played = true;
+                    }
+                } else {
+                    clearInterval(interval_id);
+                }
+            }, 1000);
+        </script>
+    </body>
+</html>
